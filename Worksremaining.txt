@@ -1,0 +1,2 @@
+Sending emails and confirming then remains in both admin and users
+Get Table, Get orders associated with a table.
