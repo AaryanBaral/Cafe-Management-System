@@ -1,2 +1,6 @@
 Sending emails and confirming then remains in both admin and users
 Get Table, Get orders associated with a table.
+
+Update Ratings, get all the ratings associated to an order and menuItem.
+
+Add indexes to the menuItems
