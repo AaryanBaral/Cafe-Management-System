@@ -5,19 +5,27 @@ namespace Cafe_Management_System.Mappers;
 
 public static class TableMapper
 {
-    public static Tables ToTable(this AddTableDto tableDto, string qrData)
+    public static Tables ToTable(this AddTableDto tableDto)
     {
         return new Tables()
         {
             TableNumber = tableDto.TableNo,
             IsOccupied = false,
-            Qrdata = qrData
+            QrData = ""
         };
     }
 
-    public static void UpdateTable(this Tables table, AddTableDto tableDto, string qrCodeData)
+    public static void UpdateTable(this Tables table, AddTableDto tableDto)
     {
         table.TableNumber = tableDto.TableNo;
-        table.Qrdata = qrCodeData;
+    }
+
+    public static ReadTableDto ToReadTable(this Tables table)
+    {
+        return new ReadTableDto()
+        {
+            TableId = table.TableId,
+            TableNo = table.TableNumber,
+        };
     }
 }

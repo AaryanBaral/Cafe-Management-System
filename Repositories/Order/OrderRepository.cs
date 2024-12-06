@@ -55,5 +55,44 @@ public class OrderRepository(
         await _context.Orders.Where(o => o.OrderId == orderId).ExecuteDeleteAsync();
         await _context.SaveChangesAsync();
     }
+
+    public async Task<ReadOrderDto> GetOrder(string orderId)
+    {
+        var order = await _context.Orders
+                        .FirstOrDefaultAsync(o => o.OrderId == orderId)
+                    ?? throw new KeyNotFoundException("Order Not Found");
+        var orderItemDto = await _orderItemRepository.GetAllOrderItems(order.OrderId);
+        var table = await _context.Tables.FindAsync(order.TableId)??throw new KeyNotFoundException("Table Not Found");
+        var user = await _userManager.FindByIdAsync(order.CustomerId)??throw new KeyNotFoundException("Customer Not Found");
+        return order.ToReadOrder(table, user, orderItemDto);
+    }
+
+    public async Task<List<ReadOrderDto>> GetAllOrderByTableId(string tableId)
+    {
+        var orders = await _context.Orders.Where(o => o.TableId == tableId).ToListAsync();
+        var order = await Task.WhenAll(orders.Select(async o =>
+        {
+            var table = await _context.Tables.FindAsync(o.TableId) ?? throw new KeyNotFoundException("Table Not Found");
+            var user = await _userManager.FindByIdAsync(o.CustomerId) ??
+                       throw new KeyNotFoundException("Customer Not Found");
+            var orderItems = await _orderItemRepository.GetAllOrderItems(o.OrderId);
+            return o.ToReadOrder(table, user, orderItems);
+        }));
+        return order.ToList();
+    }
+
+    public async Task<List<ReadOrderDto>> GetAllOrderByCustomerId(string customerId)
+    {
+        var orders = await _context.Orders.Where(o => o.CustomerId == customerId).ToListAsync();
+        var order = await Task.WhenAll(orders.Select(async o =>
+        {
+            var table = await _context.Tables.FindAsync(o.TableId) ?? throw new KeyNotFoundException("Table Not Found");
+            var user = await _userManager.FindByIdAsync(o.CustomerId) ??
+                       throw new KeyNotFoundException("Customer Not Found");
+            var orderItems = await _orderItemRepository.GetAllOrderItems(o.OrderId);
+            return o.ToReadOrder(table, user, orderItems);
+        }));
+        return order.ToList();
+    }
     
-}
+}   
