@@ -25,6 +25,7 @@ public static class OrderMapper
     {
         return new ReadOrderDto()
         {
+            OrderId = order.OrderId,
             Table = table.ToReadTable(),
             TotalAmount = order.TotalAmount,
             OrderUser = customer.ToReadUserDto(),

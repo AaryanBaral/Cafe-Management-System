@@ -40,7 +40,7 @@ public static class MenuItemMapper
         };
     }
 
-    public static void ToUpdatedMenuItems(this MenuItems menuItems,AddMenuItemDto newMenuItem ,Categories categories)
+    public static void ToUpdatedMenuItems(this MenuItems menuItems, AddMenuItemDto newMenuItem, Categories categories)
     {
         menuItems.Name = newMenuItem.Name;
         menuItems.Category = categories;
@@ -52,5 +52,27 @@ public static class MenuItemMapper
         menuItems.Description = newMenuItem.Description;
         menuItems.Spicy = newMenuItem.Spicy;
         menuItems.CostPrice = newMenuItem.CostPrice;
+    }
+
+    public static ReadMenuItemForRating ToReadMenuItemForRating(this MenuItems menuItems)
+    {
+        return new ReadMenuItemForRating()
+        {
+            Id = menuItems.MenuItemId,
+            Name = menuItems.Name,
+            ImageUrl = menuItems.ImageUrl,
+            SellingPrice = menuItems.SellingPrice
+        };
+    }
+
+    public static ReadMenuItemForOrderItemDto ToReadMenuItemForOrderItems(this MenuItems menuItems)
+    {
+        return new ReadMenuItemForOrderItemDto()
+        {
+            Id = menuItems.MenuItemId,
+            Name = menuItems.Name,
+            Description = menuItems.Description,
+            IsVegetarian = menuItems.IsVegetarian,
+        };
     }
 }

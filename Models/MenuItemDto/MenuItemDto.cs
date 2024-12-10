@@ -37,3 +37,11 @@ public class ReadMenuItemForOrderItemDto
     public required string Description { get; set;}
     public required bool IsVegetarian{ get; set;}
 }
+
+public class ReadMenuItemForRating
+{
+    public required string Id { get; set;}
+    public required string Name { get; set;}   
+    public required string ImageUrl { get; set;}
+    public required double SellingPrice { get; set;}
+}

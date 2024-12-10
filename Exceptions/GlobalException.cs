@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Net;
 using Azure;
+using Cafe_Management_System.Models.UsersDto;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Data.SqlClient;
@@ -12,7 +13,7 @@ namespace Cafe_Management_System.Exceptions;
 
 public class GlobalException:IExceptionHandler
 {
-    private ILogger<GlobalException> _logger;
+    private readonly ILogger<GlobalException> _logger;
 
     public GlobalException(ILogger<GlobalException> logger)
     {

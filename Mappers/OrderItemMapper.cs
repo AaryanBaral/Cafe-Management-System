@@ -20,7 +20,7 @@ public static class OrderItemMapper
         };
     }
 
-    public static ReadOrderItemDto ToReadOrderItemDto(this OrderItems orderItem)
+    public static ReadOrderItemDto ToReadOrderItemDto(this OrderItems orderItem, MenuItems menuItem)
     {
         return new ReadOrderItemDto()
         {
@@ -29,13 +29,7 @@ public static class OrderItemMapper
             Quantity = orderItem.Quantity,
             SubTotal = orderItem.SubTotal,
             UnitPrice = orderItem.UnitPrice,
-            MenuItem = new ReadMenuItemForOrderItemDto()
-            {
-                Id = orderItem.MenuItemId,
-                Name = orderItem.MenuItem.Name,
-                Description = orderItem.MenuItem.Description,
-                IsVegetarian = orderItem.MenuItem.IsVegetarian,
-            }
+            MenuItem = menuItem.ToReadMenuItemForOrderItems()
         };
     }
 }

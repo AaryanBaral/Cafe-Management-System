@@ -13,7 +13,9 @@ public class OrderItemRepository(
 
     public async Task AddOrderItem(AddOrderItemDto addOrderItemDto, string orderId)
     {
-        var menuItem = await _context.MenuItems.FindAsync(addOrderItemDto.MenuItemId)?? throw new KeyNotFoundException("MenuItem Not Found");
+        var menuItem = await _context.MenuItems
+            .FindAsync(addOrderItemDto.MenuItemId)
+                       ?? throw new KeyNotFoundException("MenuItem Not Found");
         var order = await _context.Orders.FindAsync(orderId)?? throw new KeyNotFoundException("Order Not Found");
         var newOrder = addOrderItemDto.ToOrderItems(order, menuItem);
         _context.OrderItems.Add(newOrder);
@@ -28,7 +30,7 @@ public class OrderItemRepository(
             .Include(oi => oi.MenuItem)
             .Where(o=>o.OrderId == orderId)
             .ToListAsync() ?? throw new KeyNotFoundException("Order Not Found");
-        return orderItems.Select(e => e.ToReadOrderItemDto()).ToList();
+        return orderItems.Select(e => e.ToReadOrderItemDto(e.MenuItem)).ToList();
     }
 
     public async Task DeleteAllOrderItem(string orderId)
@@ -43,8 +45,11 @@ public class OrderItemRepository(
     
     public async Task<ReadOrderItemDto> GetOrderItemById(string orderItemId)
     {
-        var order = await _context.OrderItems.FindAsync(orderItemId)?? throw new KeyNotFoundException("Order Not Found");
-        return order.ToReadOrderItemDto();
+        var order = await _context.OrderItems
+            .Include(oi=>oi.MenuItem)
+            .FirstOrDefaultAsync(oi=>oi.OrderItemId == orderItemId)
+                    ?? throw new KeyNotFoundException("Order Not Found");
+        return order.ToReadOrderItemDto(order.MenuItem);
     }
     
     

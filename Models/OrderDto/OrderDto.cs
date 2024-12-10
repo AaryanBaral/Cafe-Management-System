@@ -16,6 +16,7 @@ public class CreateOrderDto
 
 public class ReadOrderDto
 {
+    public required string OrderId {get; set;}
     public required ReadTableDto Table {get; set;}
     public required double TotalAmount {get; set;}
     public required List<ReadOrderItemDto> OrderItems {get; set;}

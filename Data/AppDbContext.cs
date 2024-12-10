@@ -61,11 +61,7 @@ public class AppDbContext (DbContextOptions<AppDbContext> options): IdentityDbCo
             entity.HasOne(r => r.MenuItem)
                 .WithMany()
                 .HasForeignKey(r => r.MenuItemId);
-
-
-            entity.HasOne(r => r.Order)
-                .WithMany()
-                .HasForeignKey(r => r.OrderId);
+            
 
         });
 
