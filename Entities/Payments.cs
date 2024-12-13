@@ -9,6 +9,6 @@ public class Payments
     public required Orders Order { get; set; }
     public required double  Amount { get; set; }
     public required PaymentMethodEnum PaymentMethod { get; set; }
-    public required DateTime PaymentDate { get; set; } = DateTime.Now;
+    public required DateTime PaymentDate { get; set; } = DateTime.UtcNow;
     public required PaymentStatusEnum PaymentStatus { get; set; }
 }

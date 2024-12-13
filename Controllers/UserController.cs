@@ -25,16 +25,47 @@ public class UserController(
                 Success = true,
             });   
     }
-    [HttpGet]
+    
+    [HttpPost]
     [Route("/register")]
-    public async Task<IActionResult> CreateUsers(RegisterUserDto registerUserDto, IFormFile? image)
+    public async Task<IActionResult> CreateUsers([FromForm]RegisterUserDto registerUserDto, IFormFile? image)
     {
             var users = await _repository.RegisterUser(registerUserDto, image);
-            return StatusCode(StatusCodes.Status200OK, new ResponseDto<string>()
+            return Ok( new ResponseDto<string>()
             {
-                Data = users,
-                Success = true,
+                Data = users 
             });   
     }
-    
+
+    [HttpGet]
+    [Route("/{id}")]
+    public async Task<IActionResult> GetUserById(string id)
+    {
+        var result = await _repository.GetUserById(id);
+        return Ok(new ResponseDto<ReadUserDto>()
+        {
+            Data = result
+        });
+        
+    }
+
+    [HttpPut]
+    [Route("/{id}")]
+    public async Task<IActionResult> UpdateUser(string id, RegisterUserDto registerUserDto, IFormFile? image)
+    {
+        await _repository.UpdateUser( registerUserDto, id, image);
+        return Ok(new ResponseDto<string>()
+        {
+            Data = $"User successfully updated"
+        });
+    }
+
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        await _repository.DeleteUserById(id);
+        return Ok(new ResponseDto<string>()
+        {
+            Data = $"User successfully deleted"
+        });
+    }
 }

@@ -12,16 +12,17 @@ namespace Cafe_Management_System.Repositories.User;
 
 public class UserRepository(
     UserManager<Users> userManager, 
-    CloudinaryService cloudinaryService,
-    JwtService jwtService
+    ICloudinaryService cloudinaryService,
+    IJwtService jwtService
     ):IUserRepository
 {
     private readonly UserManager<Users> _userManager = userManager;
-    private readonly CloudinaryService _cloudinaryService = cloudinaryService;
-    private readonly JwtService _jwtService = jwtService;
+    private readonly ICloudinaryService _cloudinaryService = cloudinaryService;
+    private readonly IJwtService _jwtService = jwtService;
     
     public async Task<string> RegisterUser(RegisterUserDto registerUserDto, IFormFile? file )
     {
+        
         var newUser = new Users( )
         {
             Email = registerUserDto.Email,
@@ -33,7 +34,11 @@ public class UserRepository(
             var downloadUrl = await _cloudinaryService.UploadImage(file);
             newUser.ImageUrl = downloadUrl;
         }
-        await _userManager.CreateAsync(newUser, registerUserDto.Password);
+        var isUserCreated = await _userManager.CreateAsync(newUser, registerUserDto.Password)?? throw new Exception("Error while processing identity");
+        if (!isUserCreated.Succeeded)
+        {
+            throw new Exception(isUserCreated.Errors.FirstOrDefault()?.Description);
+        }
         var token = _jwtService.GenerateJwtToken(newUser);
         return token;
     }

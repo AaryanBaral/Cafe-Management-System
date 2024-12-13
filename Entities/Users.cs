@@ -6,12 +6,11 @@ namespace Cafe_Management_System.Entities;
 public class Users:IdentityUser
 {
     public override string? PasswordHash { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public override required string Email { get; set; }
     public override required string UserName { get; set; }
     public required AuthType AuthType { get; set; }
     public string? AuthId { get; set; }
-    
     public string? ImageUrl { get; set; }
 }
 
